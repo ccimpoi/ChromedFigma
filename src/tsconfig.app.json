@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "types": []
+    "types": [
+      "chrome"
+    ]
   },
   "exclude": [
     "src/test.ts",

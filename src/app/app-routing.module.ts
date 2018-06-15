@@ -7,9 +7,9 @@ import { ExportComponent } from './export/export.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'options', component: OptionsComponent }
+  { path: 'options', component: OptionsComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'export', component: ExportComponent }
+  { path: 'export', component: ExportComponent },
   { path: 'export/:page', component: ExportComponent }
 ];
 

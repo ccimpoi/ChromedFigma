@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges, SimpleChange, AfterViewInit, ViewChildren, Directive } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChange, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { FigmaService } from '../figma.service';
+import { MessageService } from '../message.service';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot, ActivatedRoute, ParamMap } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -12,9 +13,10 @@ export class ExportComponent implements OnInit, AfterViewInit {
 
   @ViewChildren("link") links: QueryList<any>
 
+  pages: any[];
   pagesLinks: Object[] = [];
 
-  constructor(private figmaService: FigmaService, private router: Router, private route: ActivatedRoute, private sanitizer: DomSanitizer) { }
+  constructor(private figmaService: FigmaService, private router: Router, private route: ActivatedRoute, private sanitizer: DomSanitizer, private messageService: MessageService) { }
 
   ngOnInit() {
     var pageId = this.route.snapshot.paramMap.get('page');
@@ -62,21 +64,21 @@ export class ExportComponent implements OnInit, AfterViewInit {
 
         this.pagesLinks.push(linkData);
       }
-
-      console.log(this.pagesLinks);
     }
   }
 
   ngAfterViewInit() {
+    var exported = false;
     this.links.forEach(function(el) {
       el.nativeElement.click();
+      exported = true;
     });
+
+    if (exported) this.messageService.add("Html pages exported to your browser's Downloads folder.");
   }
 
-  onData(f: Object) {
+  onData(f: any) {
     this.figmaService.fileData = f;
-
-    console.log(this.figmaService.fileData);
     this.pages = this.figmaService.getPages();
   }
 

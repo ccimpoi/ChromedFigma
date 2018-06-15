@@ -2,9 +2,11 @@
   "manifest_version": 2,
   "name": "ChromedFigma",
   "description": "Figma extensions for Google Chrome",
-  "version": "0.0.1",
-  "permissions": [],
+  "version": "1.0.0",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "icons": {
+    "350": "ChromedFigma.png"
+  },
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -14,7 +16,8 @@
   },
   "permissions": [
     "declarativeContent",
-    "tabs"
+    "webNavigation",
+    "https://api.figma.com/*"
   ],
   "options_page": "index.html#/options"
 }

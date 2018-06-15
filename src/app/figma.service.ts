@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { sprintf } from "sprintf-js"
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service'
-import { catchError, map, tap } from 'rxjs/operators';;
+import { catchError, map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +12,18 @@ export class FigmaService {
 
   static readonly FIGMA_API_URL = 'https://api.figma.com/v1/files/%s'
 
-  fileData: Object;
+  fileData: any;
 
   constructor(private http: HttpClient, private messageService: MessageService) { }
 
   getFileId() {
     try {
       var res: string = '';
-      chrome.tabs.query({"currentWindow": true, "active": true}, function(tabs) {
-        res = new RegExp('/file/([^\/]+)/').exec(tabs[0].url)[1];
-      });
+      var url = chrome.extension.getBackgroundPage()['url'];
+      res = new RegExp('/file\/([^\/]+)/').exec(url)[1];
     } catch(e) {
-      res = window.prompt("Figma file ID")
+      console.log(e);
+      res = window.prompt("Figma file ID");
     }
 
     return res;
@@ -40,15 +41,15 @@ export class FigmaService {
     }};
     this.messageService.add('Loading page...');
 
-    return this.http.get<Object>(sprintf(FigmaService.FIGMA_API_URL, this.getFileId()), options)
+    return this.http.get<any>(sprintf(FigmaService.FIGMA_API_URL, this.getFileId()), options)
       .pipe(
         tap(file => this.log('Page loaded.')),
         catchError(this.handleError('getFile', []))
       );;
   }
 
-  getPages(): Object[] {
-    var res: Object[] = [];
+  getPages(): any[] {
+    var res = [];
 
     for (let p of this.fileData.document.children) {
       res.push({'id': p.id, 'name': p.name});
@@ -61,8 +62,7 @@ export class FigmaService {
     this.log('Exporting page...');
 
     var exportData: Object = {};
-    var pData = {};
-    for (pData of this.fileData.document.children) {
+    for (var pData of this.fileData.document.children) {
       if(pData.id == pId) break;
     }
 
@@ -109,8 +109,9 @@ export class FigmaService {
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-    this.log(`${operation} failed: ${error.message}`);
+      this.log(`${operation} failed: ${error.message}`);
 
-    return of(result as T);
+      return of(result as T);
+    }
   };
 }
