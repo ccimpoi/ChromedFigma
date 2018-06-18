@@ -1,8 +1,8 @@
-<nav class="nav flex-column">
-  <a *ngFor="let p of pages" class="nav-link"
+<div class="list-group">
+  <a *ngFor="let p of pages" class="list-group-item list-group-item-action"
     [routerLink]="['/export', p.id]">
     {{ p.name }}
   </a>
-</nav>
+</div>
 
 <a *ngFor="let pls of pagesLinks" #link download="{{ pls.download}}" [href]="pls.href"></a>

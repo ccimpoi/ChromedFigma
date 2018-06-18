@@ -13,20 +13,34 @@ export class FigmaService {
   static readonly FIGMA_API_URL = 'https://api.figma.com/v1/files/%s'
 
   fileData: any;
+  private _url: string = "";
+
+  set url(s: string) {
+    this._url = s;
+  }
+  get url(): string {
+    return this._url;
+  }
 
   constructor(private http: HttpClient, private messageService: MessageService) { }
 
+  /*
+   * This must be called at component init because it s async and needs time
+   */
   getFileId() {
     try {
       var res: string = '';
-      var url = chrome.extension.getBackgroundPage()['url'];
-      res = new RegExp('/file\/([^\/]+)/').exec(url)[1];
+      var __this = this;
+      chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+        for (let t of tabs) {
+          __this.url = new RegExp('/file/([^/]+)/').exec(t.url)[1];
+          break;
+        }
+      });
     } catch(e) {
       console.log(e);
-      res = window.prompt("Figma file ID");
+      this.url = window.prompt("Figma file ID");
     }
-
-    return res;
   }
 
   getFile(): Observable<string> {
@@ -40,8 +54,11 @@ export class FigmaService {
       'X-Figma-Token': token
     }};
     this.messageService.add('Loading page...');
+    var __this = this;
 
-    return this.http.get<any>(sprintf(FigmaService.FIGMA_API_URL, this.getFileId()), options)
+    console.log("serv: url = " + this.url);
+
+    return this.http.get<any>(sprintf(FigmaService.FIGMA_API_URL, __this.url), options)
       .pipe(
         tap(file => this.log('Page loaded.')),
         catchError(this.handleError('getFile', []))

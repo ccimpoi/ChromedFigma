@@ -16,11 +16,14 @@ export class ExportComponent implements OnInit, AfterViewInit {
   pages: any[];
   pagesLinks: Object[] = [];
 
-  constructor(private figmaService: FigmaService, private router: Router, private route: ActivatedRoute, private sanitizer: DomSanitizer, private messageService: MessageService) { }
+  constructor(private figmaService: FigmaService, private router: Router, private route: ActivatedRoute, private sanitizer: DomSanitizer, private messageService: MessageService) {
+    //
+  }
 
   ngOnInit() {
     var pageId = this.route.snapshot.paramMap.get('page');
     if (!pageId) {
+      console.log("comp: url = " + this.figmaService.url);
       this.figmaService.getFile()
         .subscribe(file => this.onData(file));
     } else {

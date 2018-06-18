@@ -12,12 +12,3 @@ chrome.runtime.onInstalled.addListener(function() {
     ]);
   });
 });
-
-var url = "";
-
-chrome.webNavigation.onCommitted.addListener(function(info) {
-  url = info.url;
-}, {url: [{urlMatches : 'https://www.figma.com/file/'}]});
-chrome.webNavigation.onHistoryStateUpdated.addListener(function(info) {
-  url = info.url;
-}, {url: [{urlMatches : 'https://www.figma.com/file/'}]});
