@@ -49,7 +49,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
 <meta charset="UTF-8">
 <title>${p.name}</title>
 </head>
-<body>
+<body style="margin: 0px;">
 <img src="${p.name}.png" width="${p.width}" height="${p.height}" usemap="#map">
 <map name="map">
         `);
