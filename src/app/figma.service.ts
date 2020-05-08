@@ -60,7 +60,9 @@ export class FigmaService {
 
     return this.http.get<any>(sprintf(FigmaService.FIGMA_API_URL, __this.url), options)
       .pipe(
-        tap(file => this.log('Page loaded.')),
+        tap(file => {
+          this.log('Page loaded');
+        }),
         catchError(this.handleError('getFile', []))
       );;
   }

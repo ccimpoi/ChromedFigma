@@ -72,12 +72,18 @@ export class ExportComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     var exported = false;
-    this.links.forEach(function(el) {
-      el.nativeElement.click();
-      exported = true;
-    });
 
-    if (exported) this.messageService.add("Html pages exported to your browser's Downloads folder.");
+    if (this.links.length) {
+      let timeout = 1000;
+      this.links.forEach(function(el) {
+        setTimeout(function() { el.nativeElement.click() }, timeout);
+        timeout += 100;
+
+        exported = true;
+      });
+
+      if (exported) this.messageService.add("Html pages are being exported to your browser's Downloads folder.");
+    }
   }
 
   onData(f: any) {
