@@ -10,7 +10,8 @@ import { Observable, of } from 'rxjs';
 })
 export class FigmaService {
 
-  static readonly FIGMA_API_URL = 'https://api.figma.com/v1/files/%s'
+  static readonly FIGMA_API_URL = 'https://api.figma.com/v1/files/%s';
+  static readonly INTERACTION_BACK = '__back__';
 
   fileData: any;
   private _url: string = "";
@@ -56,8 +57,6 @@ export class FigmaService {
     this.messageService.add('Loading page...');
     var __this = this;
 
-    console.log("serv: url = " + this.url);
-
     return this.http.get<any>(sprintf(FigmaService.FIGMA_API_URL, __this.url), options)
       .pipe(
         tap(file => {
@@ -100,8 +99,18 @@ export class FigmaService {
       let parseChildren = function(children) {
         for (let c of children) {
           if (c.transitionNodeID == null) {
-            if (c.children != null) {
-              parseChildren(c.children);
+            if (c.name.indexOf(FigmaService.INTERACTION_BACK) !== -1) {
+              d.areas.push({
+                left: Math.round(+c.absoluteBoundingBox.x - d.x),
+                top: Math.round(+c.absoluteBoundingBox.y - d.y),
+                right: Math.round(+c.absoluteBoundingBox.x - d.x + c.absoluteBoundingBox.width),
+                bottom: Math.round(+c.absoluteBoundingBox.y - d.y + c.absoluteBoundingBox.height),
+                href: 'javascript:history.back();'
+              });
+            } else {
+              if (c.children != null) {
+                parseChildren(c.children);
+              }
             }
           } else {
             d.areas.push({

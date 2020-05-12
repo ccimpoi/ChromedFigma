@@ -23,7 +23,6 @@ export class ExportComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     var pageId = this.route.snapshot.paramMap.get('page');
     if (!pageId) {
-      console.log("comp: url = " + this.figmaService.url);
       this.figmaService.getFile()
         .subscribe(file => this.onData(file));
     } else {
@@ -31,7 +30,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
 
       for (let k in pData) {
         for (let c of pData[k].areas) {
-          if (pData[c.link] != null) {
+          if (c.link && pData[c.link] != null) {
             c.href = pData[c.link].name + '.html';
           }
         }
