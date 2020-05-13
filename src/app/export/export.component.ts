@@ -73,10 +73,12 @@ export class ExportComponent implements OnInit, AfterViewInit {
     var exported = false;
 
     if (this.links.length) {
-      let timeout = 1000;
+      let len = this.links.length;
+      let timeoutAdd = Math.min(1000, len * 10);
+      let timeout = timeoutAdd; 
       this.links.forEach(function(el) {
-        setTimeout(function() { el.nativeElement.click() }, timeout);
-        timeout += 100;
+        setTimeout(function() { el.nativeElement.click() }, timeout);  
+        timeout += timeoutAdd;
 
         exported = true;
       });
