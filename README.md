@@ -6,7 +6,7 @@ Important: Please set your Figma Personal Access Token in the extension Options 
 
 Notes:
 
-In order to emulate the Figma "Back" interaction you can use the string "__back__" in the name of an element (that does not already have a transition to another element) and this element will export to a link with `javascript:history.back();`.
+In order to emulate the Figma "Back" interaction you can use the string `__back__` in the name of an element (that does not already have a transition to another element) and this element will export to a link with `javascript:history.back();`.
 
 It assumes that you already exported the frames to *.png image files in a folder. Then you copy the exported *.html files in the same folder and open one of them.
 
