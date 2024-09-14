@@ -34,7 +34,7 @@ export class FigmaService {
       var __this = this;
       chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
         for (let t of tabs) {
-          __this.url = new RegExp('/file/([^/]+)/').exec(t.url)[1];
+          __this.url = new RegExp('/design/([^/]+)/').exec(t.url)[1];
           break;
         }
       });
